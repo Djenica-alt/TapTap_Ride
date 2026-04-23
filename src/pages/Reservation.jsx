@@ -109,8 +109,11 @@ export default function Reservation({ onReserve, onOpenProfile, onOpenHistorique
       </div>
 
       {isProfileOpen && (
-        <div className="profile-overlay">
-          <div className="profile-sidebar">
+        <div className="profile-overlay" onClick={() => setIsProfileOpen(false)}>
+          <div
+            className="profile-sidebar"
+            onClick={(event) => event.stopPropagation()}
+          >
             <Profil
               onClose={() => setIsProfileOpen(false)}
               onOpenFullProfile={() => {

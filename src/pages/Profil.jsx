@@ -5,9 +5,6 @@ export default function Profil({ onClose, onOpenFullProfile, onOpenHistorique, s
     <div className={`profile-page ${sidebar ? 'sidebar' : ''}`}>
       <div className="profile-card">
         <header className="profile-header">
-          <button type="button" className="profile-back" onClick={onClose}>
-            ← Retour
-          </button>
           <div className="profile-title">TapTap Ride</div>
         </header>
 
