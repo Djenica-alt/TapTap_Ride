@@ -52,13 +52,15 @@ export default function Reservation({ onReserve, onOpenProfile, onOpenHistorique
 
         <section className="reservation-search-section">
           <div className="reservation-search">
-          <div className="location-pill">Port-au-Prince, Centre-ville</div>
-          <label className="search-box">
-            <span className="search-icon">🔎</span>
-            <input type="text" placeholder="Où allez-vous ?" />
-          </label>
-        </div>
-
+            <label className="search-box">
+              <span className="search-icon">📍</span>
+              <input type="text" placeholder="Point de départ" />
+            </label>
+            <label className="search-box">
+              <span className="search-icon">🔎</span>
+              <input type="text" placeholder="Où allez-vous ?" />
+            </label>
+          </div>
         </section>
         
 
