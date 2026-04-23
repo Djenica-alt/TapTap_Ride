@@ -11,9 +11,9 @@ export default function Mon_profil({ onBack, onOpenHistorique }) {
         </header>
 
         <div className="mon-profil-user-card">
-          <div className="mon-profil-avatar">JD</div>
+          <div className="mon-profil-avatar">SA</div>
           <div className="mon-profil-user-info">
-            <div className="mon-profil-name">Jean Dana</div>
+            <div className="mon-profil-name">Alce Steevens</div>
             <div className="mon-profil-status">Membre depuis mars 2022</div>
             <div className="mon-profil-rating">4.9 (842 évaluations)</div>
           </div>
@@ -23,7 +23,7 @@ export default function Mon_profil({ onBack, onOpenHistorique }) {
           <div className="mon-profil-section-title">Informations de contact</div>
           <div className="mon-profil-field">
             <span>Email</span>
-            <div>jean@example.com</div>
+            <div>alces@example.com</div>
           </div>
           <div className="mon-profil-field">
             <span>Téléphone</span>

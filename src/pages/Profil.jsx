@@ -9,10 +9,10 @@ export default function Profil({ onClose, onOpenFullProfile, onOpenHistorique, s
         </header>
 
         <div className="profile-user-card">
-          <div className="profile-avatar">JD</div>
+          <div className="profile-avatar">SA</div>
           <div className="profile-user-info">
-            <div className="profile-name">Jean Dana</div>
-            <div className="profile-email">jean@example.com</div>
+            <div className="profile-name">Alce Steevens</div>
+            <div className="profile-email">alces@example.com</div>
           </div>
         </div>
 
