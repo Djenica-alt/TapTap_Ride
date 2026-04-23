@@ -1,1 +1,137 @@
-﻿
+﻿.profile-page {
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  background: #f2f4f7;
+}
+
+.profile-page.sidebar {
+  min-height: 100%;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: stretch;
+  background: transparent;
+  padding: 0;
+}
+
+.profile-page.sidebar .profile-card {
+  width: 100%;
+  min-height: 100%;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 24px;
+}
+
+.profile-page.sidebar .profile-header {
+  margin-bottom: 18px;
+}
+
+.profile-page.sidebar .profile-user-card {
+  margin-bottom: 20px;
+}
+
+.profile-page.sidebar .profile-avatar {
+  width: 50px;
+  height: 50px;
+}
+
+.profile-page.sidebar .profile-menu-item {
+  padding: 16px 18px;
+}
+
+.profile-card {
+  width: min(420px, 100%);
+  background: #ffffff;
+  border-radius: 28px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+  padding: 28px;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.profile-back {
+  border: none;
+  background: #e5e7eb;
+  color: #0f172a;
+  border-radius: 999px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.profile-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.profile-user-card {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  padding: 20px;
+  background: #f8fafc;
+  border-radius: 24px;
+  margin-bottom: 24px;
+}
+
+.profile-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #10b981;
+  color: white;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 1.15rem;
+}
+
+.profile-user-info {
+  min-width: 0;
+}
+
+.profile-name {
+  margin: 0 0 6px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.profile-email {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+.profile-menu {
+  display: grid;
+  gap: 12px;
+}
+
+.profile-menu-item {
+  text-align: left;
+  width: 100%;
+  padding: 18px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.profile-menu-item:hover {
+  background: #f8fafc;
+}
+
+.profile-menu-item.danger {
+  color: #dc2626;
+  border-color: rgba(220, 38, 38, 0.16);
+}

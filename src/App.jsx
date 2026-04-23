@@ -2,6 +2,8 @@
 import Reservation from './pages/Reservation'
 import ReservationConfirmation from './pages/ReservationConfirmation'
 import ReservationSuccess from './pages/ReservationSuccess'
+import Mon_profil from './pages/Mon_profil'
+import Historique from './pages/Historique'
 
 function App() {
   const [reservedDriver, setReservedDriver] = useState(null)
@@ -15,6 +17,8 @@ function App() {
             setReservedDriver(driver)
             setPage('confirmation')
           }}
+          onOpenProfile={() => setPage('mon_profil')}
+          onOpenHistorique={() => setPage('historique')}
         />
       )}
       {page === 'confirmation' && reservedDriver && (
@@ -32,6 +36,15 @@ function App() {
             setPage('reservation')
           }}
         />
+      )}
+      {page === 'mon_profil' && (
+        <Mon_profil
+          onBack={() => setPage('reservation')}
+          onOpenHistorique={() => setPage('historique')}
+        />
+      )}
+      {page === 'historique' && (
+        <Historique onBack={() => setPage('reservation')} />
       )}
     </div>
   )

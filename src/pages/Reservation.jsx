@@ -1,8 +1,10 @@
 ﻿import { useState } from 'react'
 import './Reservation.css'
+import Profil from './Profil'
 
-export default function Reservation({ onReserve }) {
+export default function Reservation({ onReserve, onOpenProfile, onOpenHistorique }) {
   const [selectedDriver, setSelectedDriver] = useState(null)
+  const [isProfileOpen, setIsProfileOpen] = useState(false)
   const drivers = [
     {
       name: 'Marc Antoine',
@@ -43,7 +45,9 @@ export default function Reservation({ onReserve }) {
       <div className="reservation-card">
         <header className="reservation-header">
           <div className="reservation-brand">TapTap Ride</div>
-          <div className="reservation-menu">☰</div>
+          <div className="reservation-menu" onClick={() => setIsProfileOpen(true)}>
+            ☰
+          </div>
         </header>
 
         <section className="reservation-search-section">
@@ -101,6 +105,25 @@ export default function Reservation({ onReserve }) {
           })}
         </section>
       </div>
+
+      {isProfileOpen && (
+        <div className="profile-overlay">
+          <div className="profile-sidebar">
+            <Profil
+              onClose={() => setIsProfileOpen(false)}
+              onOpenFullProfile={() => {
+                setIsProfileOpen(false)
+                onOpenProfile?.()
+              }}
+              onOpenHistorique={() => {
+                setIsProfileOpen(false)
+                onOpenHistorique?.()
+              }}
+              sidebar
+            />
+          </div>
+        </div>
+      )}
     </div>
   )
 }
