@@ -1,6 +1,45 @@
-﻿import './Mon_profil.css'
+﻿import { useState, useEffect } from 'react'
+import './Mon_profil.css'
+import { saveProfilePicture, getProfilePicture } from '../utils/profilePictureManager'
 
 export default function Mon_profil({ onBack, onOpenHistorique }) {
+  const [profilePicture, setProfilePicture] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    // Load profile picture from localStorage on component mount
+    const savedPicture = getProfilePicture()
+    if (savedPicture) {
+      setProfilePicture(savedPicture)
+    }
+  }, [])
+
+  const handleProfilePictureChange = async (event) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file')
+      return
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('File size must be less than 5MB')
+      return
+    }
+
+    setIsLoading(true)
+    try {
+      const pictureUrl = await saveProfilePicture(file)
+      setProfilePicture(pictureUrl)
+    } catch (error) {
+      alert('Failed to upload profile picture: ' + error.message)
+    } finally {
+      setIsLoading(false)
+    }
+  }
   return (
     <div className="mon-profil-page">
       <div className="mon-profil-card">
@@ -11,7 +50,24 @@ export default function Mon_profil({ onBack, onOpenHistorique }) {
         </header>
 
         <div className="mon-profil-user-card">
-          <div className="mon-profil-avatar">SA</div>
+          <div className="mon-profil-avatar" onClick={() => !isLoading && document.getElementById('profilePictureInput').click()}>
+            {profilePicture ? (
+              <img src={profilePicture} alt="Profile" />
+            ) : (
+              'SA'
+            )}
+            <div className="mon-profil-avatar-overlay">
+              {isLoading ? 'Uploading...' : 'Upload'}
+            </div>
+            <input
+              id="profilePictureInput"
+              type="file"
+              accept="image/*"
+              onChange={handleProfilePictureChange}
+              className="mon-profil-file-input"
+              disabled={isLoading}
+            />
+          </div>
           <div className="mon-profil-user-info">
             <div className="mon-profil-name">Alce Steevens</div>
             <div className="mon-profil-status">Membre depuis mars 2022</div>
