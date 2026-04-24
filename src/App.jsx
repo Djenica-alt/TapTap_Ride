@@ -1,23 +1,53 @@
-// import { BrowserRouter, Routes, Route } from "react-router-dom";
-// import Accueil from "./pages/Accueil";
-// import Connexion from "./pages/Connexion";
-// import Inscription from "./pages/Inscription";
-// import Réservation from "./pages/Réservation";
-// import Paiement from "./pages/Paiement";
-// import Profil from "./pages/Profil";
-// import "./App.css";
+﻿import { useState } from 'react'
+import Reservation from './pages/Reservation'
+import ReservationConfirmation from './pages/ReservationConfirmation'
+import ReservationSuccess from './pages/ReservationSuccess'
+import Mon_profil from './pages/Mon_profil'
+import Historique from './pages/Historique'
 
-// export default function App() {
-//   return (
-//     <BrowserRouter>
-//       <Routes>
-//         <Route path="/" element={<Accueil />} />
-//         <Route path="/connexion" element={<Connexion />} />
-//         <Route path="/inscription" element={<Inscription />} />
-//         <Route path="/reservation" element={<Réservation />} />
-//         <Route path="/paiement" element={<Paiement />} />
-//         <Route path="/Profil" element={<Profil />} />
-//       </Routes>
-//     </BrowserRouter>
-//   );
-// }
+function App() {
+  const [reservedDriver, setReservedDriver] = useState(null)
+  const [page, setPage] = useState('reservation')
+
+  return (
+    <div>
+      {page === 'reservation' && (
+        <Reservation
+          onReserve={(driver) => {
+            setReservedDriver(driver)
+            setPage('confirmation')
+          }}
+          onOpenProfile={() => setPage('mon_profil')}
+          onOpenHistorique={() => setPage('historique')}
+        />
+      )}
+      {page === 'confirmation' && reservedDriver && (
+        <ReservationConfirmation
+          driver={reservedDriver}
+          onBack={() => setPage('reservation')}
+          onConfirm={() => setPage('success')}
+        />
+      )}
+      {page === 'success' && reservedDriver && (
+        <ReservationSuccess
+          driver={reservedDriver}
+          onDone={() => {
+            setReservedDriver(null)
+            setPage('reservation')
+          }}
+        />
+      )}
+      {page === 'mon_profil' && (
+        <Mon_profil
+          onBack={() => setPage('reservation')}
+          onOpenHistorique={() => setPage('historique')}
+        />
+      )}
+      {page === 'historique' && (
+        <Historique onBack={() => setPage('reservation')} />
+      )}
+    </div>
+  )
+}
+
+export default App;
