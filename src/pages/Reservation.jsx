@@ -1,10 +1,14 @@
 ﻿import { useState } from 'react'
 import './Reservation.css'
 import Profil from './Profil'
+import GoogleMap from '../components/GoogleMap'
 
 export default function Reservation({ onReserve, onOpenProfile, onOpenHistorique }) {
   const [selectedDriver, setSelectedDriver] = useState(null)
   const [isProfileOpen, setIsProfileOpen] = useState(false)
+  const [departure, setDeparture] = useState('')
+  const [destination, setDestination] = useState('')
+  const [hasSearched, setHasSearched] = useState(false)
   const drivers = [
     {
       name: 'Marc Antoine',
@@ -40,6 +44,30 @@ export default function Reservation({ onReserve, onOpenProfile, onOpenHistorique
     },
   ];
 
+  const handleSearch = () => {
+    if (departure.trim() || destination.trim()) {
+      setHasSearched(true)
+    }
+  }
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch()
+    }
+  }
+
+  const handleInputChange = (value, type) => {
+    if (type === 'departure') {
+      setDeparture(value)
+    } else {
+      setDestination(value)
+    }
+    // Auto-trigger search when either field has input
+    if (value.trim()) {
+      setHasSearched(true)
+    }
+  }
+
   return (
     <div className="reservation-page">
       <div className="reservation-card">
@@ -54,23 +82,46 @@ export default function Reservation({ onReserve, onOpenProfile, onOpenHistorique
           <div className="reservation-search">
             <label className="search-box">
               <span className="search-icon">📍</span>
-              <input type="text" placeholder="Point de départ" />
+              <input 
+                type="text" 
+                placeholder="Point de départ" 
+                value={departure}
+                onChange={(e) => handleInputChange(e.target.value, 'departure')}
+                onKeyPress={handleKeyPress}
+              />
             </label>
             <label className="search-box">
               <span className="search-icon">🔎</span>
-              <input type="text" placeholder="Où allez-vous ?" />
+              <input 
+                type="text" 
+                placeholder="Où allez-vous ?" 
+                value={destination}
+                onChange={(e) => handleInputChange(e.target.value, 'destination')}
+                onKeyPress={handleKeyPress}
+              />
             </label>
+            <button className="search-button" onClick={handleSearch}>
+              Rechercher un trajet
+            </button>
           </div>
         </section>
-        
 
-      
+        <section className="reservation-map-section">
+          <GoogleMap 
+            lat={48.8566} 
+            lng={2.3522} 
+            zoom={14}
+            className="reservation-map-card"
+          />
+        </section>
 
         <section className="drivers-block">
-          <div className="drivers-count">Chauffeurs disponibles ({drivers.length})</div>
-          {drivers.map((driver) => {
-            const isSelected = driver.name === selectedDriver
-            return (
+          {hasSearched ? (
+            <>
+              <div className="drivers-count">Chauffeurs disponibles ({drivers.length})</div>
+              {drivers.map((driver) => {
+                const isSelected = driver.name === selectedDriver
+                return (
               <div
                 key={driver.name}
                 className={`driver-card ${isSelected ? 'selected' : ''}`}
@@ -103,8 +154,14 @@ export default function Reservation({ onReserve, onOpenProfile, onOpenHistorique
                   )}
                 </div>
               </div>
-            )
-          })}
+                )
+              })}
+            </>
+          ) : (
+            <div className="no-search-message">
+              Commencez à taper pour voir les chauffeurs disponibles
+            </div>
+          )}
         </section>
       </div>
 
