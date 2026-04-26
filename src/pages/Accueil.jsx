@@ -59,7 +59,7 @@ export default function Accueil() {
                 </div>
             </section>
 
-            <section className='Footer'>
+            <section className='cta'>
                 <h2> Prêt à partir ?</h2>
                 <p>Rejoignez des milliers d'utilisateurs satisfaits et 
                     commencez à voyager intelligemment dès aujourd'hui !</p>
