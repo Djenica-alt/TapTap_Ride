@@ -1,32 +1,41 @@
 
+ * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
  .hero {
-    background-image: linear-gradient(
-      rgba(0, 0, 0, 0.5), 
+      background-image: linear-gradient(
+      rgba(0, 0, 0, 0.5),
       rgba(0, 0, 0, 0.5)
     ), url('../pages/image/Taptap.jpg');
     background-size: cover;
     background-position: center;
     text-align: left;
-    padding: 100px 30px;
-    background-color: #f5f5f5;
+    padding: 120px 60px;
     color: #ece9e9;
     font-size: 28px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 } 
 .hero h3 {
-  font-weight: normal;
-  margin-bottom: 5px;  
+    font-weight: normal;
+    font-size: 20px;
+    margin-bottom: 10px; 
 }
 
 .hero h1 {
-  font-weight: normal;
-  margin-top: 0;
-  margin-bottom: 10px;
+    font-weight: normal;
+    font-size: 48px;
+    margin-bottom: 15px;
 }
 
 .hero p {
-  margin-top: 0;
-  margin-bottom: 20px;
+    font-size: 18px;
+    margin-bottom: 30px;
 }
 
 Button {
@@ -38,6 +47,7 @@ Button {
     font-size: 18px;
     cursor: pointer;
     transition: background-color 0.5s;
+    width: fit-content;
 }
 
 Button:hover {
@@ -48,13 +58,11 @@ Button:hover {
   justify-content: space-around;
   padding: 60px 20px;
   text-align: center;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .features-title {
   font-size: 30px;
   font-weight: normal;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
   align-items: center;
   text-align: center;
   margin: 20px;
@@ -75,26 +83,23 @@ Button:hover {
   margin: 0 auto 20px;
 }
 
-.Footer {
+.cta {
     background-color: #2ecc71;
     color: black;
     text-align: center;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    padding: 20px 0;
+    padding: 60px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
 }
 
-.Footer Button {
+.cta Button {
     background-color: white;
     color: black;
-    padding: 15px 30px;
-    border: none;
-    border-radius: 50px;
-    font-size: 18px;
-    cursor: pointer;
-    transition: background-color 0.5s;
 }
 
-.Footer Button:hover {
+.cta Button:hover {
   background-color: #034d22;
-  color: white
+    color: white;
 }
