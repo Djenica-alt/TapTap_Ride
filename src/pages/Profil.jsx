@@ -1,6 +1,17 @@
-﻿import './Profil.css'
+﻿import { useState, useEffect } from 'react'
+import './Profil.css'
+import { getProfilePicture } from '../utils/profilePictureManager'
 
 export default function Profil({ onClose, onOpenFullProfile, onOpenHistorique, sidebar }) {
+  const [profilePicture, setProfilePicture] = useState(null)
+
+  useEffect(() => {
+    // Load profile picture from localStorage on component mount
+    const savedPicture = getProfilePicture()
+    if (savedPicture) {
+      setProfilePicture(savedPicture)
+    }
+  }, [])
   return (
     <div className={`profile-page ${sidebar ? 'sidebar' : ''}`}>
       <div className="profile-card">
@@ -9,7 +20,13 @@ export default function Profil({ onClose, onOpenFullProfile, onOpenHistorique, s
         </header>
 
         <div className="profile-user-card">
-          <div className="profile-avatar">SA</div>
+          <div className="profile-avatar">
+            {profilePicture ? (
+              <img src={profilePicture} alt="Profile" />
+            ) : (
+              'SA'
+            )}
+          </div>
           <div className="profile-user-info">
             <div className="profile-name">Alce Steevens</div>
             <div className="profile-email">alces@example.com</div>
