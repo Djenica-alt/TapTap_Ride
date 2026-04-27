@@ -7,15 +7,16 @@
     background-size: cover;
     background-position: center;
     text-align: left;
-    padding: 100px 30px;
+    padding: 150px ;
     background-color: #f5f5f5;
     color: #ece9e9;
     font-size: 28px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+   
 } 
 .hero h3 {
   font-weight: normal;
-  margin-bottom: 5px;  
+  margin-bottom: 10px;  
 }
 
 .hero h1 {
@@ -30,7 +31,7 @@
 }
 
 Button {
-    background-color: #2ecc71;
+    background-color: #00BC7D;
     color: white;
     padding: 15px 30px;
     border: none;
@@ -41,7 +42,7 @@ Button {
 }
 
 Button:hover {
-  background-color: #034d22;
+  background-color: #008C5F;
 }
 .features {
   display: flex;
@@ -52,7 +53,7 @@ Button:hover {
 }
 
 .features-title {
-  font-size: 30px;
+  font-size: 20px;
   font-weight: normal;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   align-items: center;
@@ -65,7 +66,7 @@ Button:hover {
 }
 
 .icon-circle {
-  background-color: #2ecc71;
+  background-color: #00BC7D;
   border-radius: 50%;
   width: 100px;
   height: 100px;
@@ -76,11 +77,12 @@ Button:hover {
 }
 
 .Footer {
-    background-color: #2ecc71;
+    background-color: #00BC7D;
     color: black;
     text-align: center;
+    
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    padding: 20px 0;
+    padding: 80px;
 }
 
 .Footer Button {
@@ -89,12 +91,13 @@ Button:hover {
     padding: 15px 30px;
     border: none;
     border-radius: 50px;
-    font-size: 18px;
+    font-size: 12px;
     cursor: pointer;
+    margin-top: 20px;
     transition: background-color 0.5s;
 }
 
 .Footer Button:hover {
-  background-color: #034d22;
+  background-color: #00BC7D;
   color: white
 }

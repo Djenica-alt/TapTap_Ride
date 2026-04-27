@@ -4,6 +4,7 @@ import ReservationConfirmation from './pages/ReservationConfirmation'
 import ReservationSuccess from './pages/ReservationSuccess'
 import Mon_profil from './pages/Mon_profil'
 import Historique from './pages/Historique'
+import Accueil from './pages/Accueil'
 
 function App() {
   const [reservedDriver, setReservedDriver] = useState(null)
@@ -11,6 +12,7 @@ function App() {
 
   return (
     <div>
+      <Accueil onStart={() => setPage('reservation')} />
       {page === 'reservation' && (
         <Reservation
           onReserve={(driver) => {
