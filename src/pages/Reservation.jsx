@@ -1,7 +1,9 @@
-﻿import { useState } from 'react'
-import './Reservation.css'
+﻿import { useState, useEffect } from 'react'
 import Profil from './Profil'
-import GoogleMap from '../components/GoogleMap'
+
+import { MapContainer, TileLayer, Marker } from "react-leaflet"
+import "leaflet/dist/leaflet.css"
+import "../mapConfig"
 
 export default function Reservation({ onReserve, onOpenProfile, onOpenHistorique }) {
   const [selectedDriver, setSelectedDriver] = useState(null)
@@ -9,6 +11,29 @@ export default function Reservation({ onReserve, onOpenProfile, onOpenHistorique
   const [departure, setDeparture] = useState('')
   const [destination, setDestination] = useState('')
   const [hasSearched, setHasSearched] = useState(false)
+
+  const [userPosition, setUserPosition] = useState(null)
+
+  // 📍 GET USER LOCATION
+  useEffect(() => {
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const { latitude, longitude } = pos.coords
+      console.log("Accuracy:", pos.coords.accuracy) // meters
+      setUserPosition([latitude, longitude])
+    },
+    (err) => {
+      console.error(err)
+      setUserPosition([18.5944, -72.3074])
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0,
+    }
+  )
+}, [])
+
   const drivers = [
     {
       name: 'Marc Antoine',
@@ -42,11 +67,13 @@ export default function Reservation({ onReserve, onOpenProfile, onOpenHistorique
       price: '150 HTG',
       arrival: '2 min',
     },
-  ];
+  ]
 
   const handleSearch = () => {
-    if (departure.trim() || destination.trim()) {
+    if (departure.trim() && destination.trim()) {
       setHasSearched(true)
+    } else {
+      setHasSearched(false)
     }
   }
 
@@ -62,111 +89,158 @@ export default function Reservation({ onReserve, onOpenProfile, onOpenHistorique
     } else {
       setDestination(value)
     }
-    // Auto-trigger search when either field has input
-    if (value.trim()) {
-      setHasSearched(true)
-    }
+  }
+
+  const isFormValid = departure.trim() && destination.trim()
+
+  // ⏳ Show loading before location is ready
+  if (!userPosition) {
+    return <div>Loading your location...</div>
   }
 
   return (
     <div className="reservation-page">
       <div className="reservation-card">
+
+        {/* HEADER */}
         <header className="reservation-header">
           <div className="reservation-brand">TapTap Ride</div>
-          <div className="reservation-menu" onClick={() => setIsProfileOpen(true)}>
+          <div
+            className="reservation-menu"
+            onClick={() => setIsProfileOpen(true)}
+          >
             ☰
           </div>
         </header>
 
+        {/* MAP */}
+        <section className="reservation-map-section">
+          <MapContainer
+            center={userPosition}
+            zoom={14}
+            className="reservation-map-card"
+            style={{ height: "100%", width: "100%" }}
+          >
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution="© OpenStreetMap contributors"
+            />
+
+            {/* 📍 USER LOCATION MARKER */}
+            <Marker position={userPosition} />
+          </MapContainer>
+        </section>
+
+        {/* SEARCH */}
         <section className="reservation-search-section">
           <div className="reservation-search">
             <label className="search-box">
               <span className="search-icon">📍</span>
-              <input 
-                type="text" 
-                placeholder="Point de départ" 
+              <input
+                type="text"
+                placeholder="Point de départ"
                 value={departure}
-                onChange={(e) => handleInputChange(e.target.value, 'departure')}
-                onKeyPress={handleKeyPress}
+                onChange={(e) =>
+                  handleInputChange(e.target.value, 'departure')
+                }
+                onKeyDown={handleKeyPress}
               />
             </label>
+
             <label className="search-box">
               <span className="search-icon">🔎</span>
-              <input 
-                type="text" 
-                placeholder="Où allez-vous ?" 
+              <input
+                type="text"
+                placeholder="Où allez-vous ?"
                 value={destination}
-                onChange={(e) => handleInputChange(e.target.value, 'destination')}
-                onKeyPress={handleKeyPress}
+                onChange={(e) =>
+                  handleInputChange(e.target.value, 'destination')
+                }
+                onKeyDown={handleKeyPress}
               />
             </label>
-            <button className="search-button" onClick={handleSearch}>
+
+            <button
+              className="search-button"
+              onClick={handleSearch}
+              disabled={!isFormValid}
+            >
               Rechercher un trajet
             </button>
           </div>
         </section>
 
-        <section className="reservation-map-section">
-          <GoogleMap 
-            lat={48.8566} 
-            lng={2.3522} 
-            zoom={14}
-            className="reservation-map-card"
-          />
-        </section>
-
+        {/* DRIVERS */}
         <section className="drivers-block">
           {hasSearched ? (
             <>
-              <div className="drivers-count">Chauffeurs disponibles ({drivers.length})</div>
+              <div className="drivers-count">
+                Chauffeurs disponibles ({drivers.length})
+              </div>
+
               {drivers.map((driver) => {
                 const isSelected = driver.name === selectedDriver
-                return (
-              <div
-                key={driver.name}
-                className={`driver-card ${isSelected ? 'selected' : ''}`}
-                onClick={() => setSelectedDriver(driver.name)}
-              >
-                <div className="driver-left">
-                  <div className="driver-avatar">👤</div>
-                  <div className="driver-info">
-                    <h3 className="driver-name">{driver.name}</h3>
-                    <p className="driver-car">{driver.car}</p>
-                    <p className="driver-distance"> {driver.distance} de vous</p>
-                  </div>
-                </div>
 
-                <div className="driver-right">
-                  <div className="driver-rating">⭐ {driver.rating}</div>
-                  <p className="driver-price">{driver.price}</p>
-                  <p className="driver-arrival"> Arrivée: {driver.arrival}</p>
-                  {isSelected && (
-                    <button
-                      type="button"
-                      className="driver-select-btn"
-                      onClick={(event) => {
-                        event.stopPropagation()
-                        onReserve?.(driver)
-                      }}
-                    >
-                      Réserver maintenant
-                    </button>
-                  )}
-                </div>
-              </div>
+                return (
+                  <div
+                    key={driver.name}
+                    className={`driver-card ${isSelected ? 'selected' : ''}`}
+                    onClick={() => setSelectedDriver(driver.name)}
+                  >
+                    <div className="driver-left">
+                      <div className="driver-avatar">👤</div>
+
+                      <div className="driver-info">
+                        <h3 className="driver-name">{driver.name}</h3>
+                        <p className="driver-car">{driver.car}</p>
+                        <p className="driver-distance">
+                          {driver.distance} de vous
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="driver-right">
+                      <div className="driver-rating">
+                        ⭐ {driver.rating}
+                      </div>
+
+                      <p className="driver-price">{driver.price}</p>
+
+                      <p className="driver-arrival">
+                        Arrivée: {driver.arrival}
+                      </p>
+
+                      {isSelected && (
+                        <button
+                          type="button"
+                          className="driver-select-btn"
+                          onClick={(event) => {
+                            event.stopPropagation()
+                            onReserve?.(driver)
+                          }}
+                        >
+                          Réserver maintenant
+                        </button>
+                      )}
+                    </div>
+                  </div>
                 )
               })}
             </>
           ) : (
             <div className="no-search-message">
-              Commencez à taper pour voir les chauffeurs disponibles
+              Remplissez les deux champs puis cliquez sur "Rechercher un trajet"
             </div>
           )}
         </section>
       </div>
 
+      {/* PROFILE SIDEBAR */}
       {isProfileOpen && (
-        <div className="profile-overlay" onClick={() => setIsProfileOpen(false)}>
+        <div
+          className="profile-overlay"
+          onClick={() => setIsProfileOpen(false)}
+        >
           <div
             className="profile-sidebar"
             onClick={(event) => event.stopPropagation()}
