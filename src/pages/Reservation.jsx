@@ -1,7 +1,7 @@
 ﻿import { useState, useEffect } from 'react'
 import Profil from './Profil'
 
-import { MapContainer, TileLayer, Marker } from "react-leaflet"
+import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet"
 import "leaflet/dist/leaflet.css"
 import "../mapConfig"
 
@@ -14,25 +14,53 @@ export default function Reservation({ onReserve, onOpenProfile, onOpenHistorique
 
   const [userPosition, setUserPosition] = useState(null)
 
+  // 🆕 Ride coordinates
+  const [pickup, setPickup] = useState(null)
+  const [destinationCoords, setDestinationCoords] = useState(null)
+
   // 📍 GET USER LOCATION
   useEffect(() => {
-  navigator.geolocation.getCurrentPosition(
-    (pos) => {
-      const { latitude, longitude } = pos.coords
-      console.log("Accuracy:", pos.coords.accuracy) // meters
-      setUserPosition([latitude, longitude])
-    },
-    (err) => {
-      console.error(err)
-      setUserPosition([18.5944, -72.3074])
-    },
-    {
-      enableHighAccuracy: true,
-      timeout: 10000,
-      maximumAge: 0,
-    }
-  )
-}, [])
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords
+        setUserPosition([latitude, longitude])
+      },
+      (err) => {
+        console.error(err)
+        setUserPosition([18.5944, -72.3074])
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
+      }
+    )
+  }, [])
+
+  // 🖱️ MAP CLICK HANDLER
+  function MapClickHandler() {
+    useMapEvents({
+      click(e) {
+        const coords = [e.latlng.lat, e.latlng.lng]
+
+        if (!pickup) {
+          setPickup(coords)
+          setDeparture("Point sélectionné sur la carte")
+        } else if (!destinationCoords) {
+          setDestinationCoords(coords)
+          setDestination("Destination sélectionnée")
+        } else {
+          // reset
+          setPickup(coords)
+          setDestinationCoords(null)
+          setDeparture("Point sélectionné sur la carte")
+          setDestination("")
+        }
+      },
+    })
+
+    return null
+  }
 
   const drivers = [
     {
@@ -70,7 +98,7 @@ export default function Reservation({ onReserve, onOpenProfile, onOpenHistorique
   ]
 
   const handleSearch = () => {
-    if (departure.trim() && destination.trim()) {
+    if ((pickup && destinationCoords) || (departure.trim() && destination.trim())) {
       setHasSearched(true)
     } else {
       setHasSearched(false)
@@ -91,9 +119,11 @@ export default function Reservation({ onReserve, onOpenProfile, onOpenHistorique
     }
   }
 
-  const isFormValid = departure.trim() && destination.trim()
+  const isFormValid =
+    (pickup && destinationCoords) ||
+    (departure.trim() && destination.trim())
 
-  // ⏳ Show loading before location is ready
+  // ⏳ Loading
   if (!userPosition) {
     return <div>Loading your location...</div>
   }
@@ -126,8 +156,16 @@ export default function Reservation({ onReserve, onOpenProfile, onOpenHistorique
               attribution="© OpenStreetMap contributors"
             />
 
-            {/* 📍 USER LOCATION MARKER */}
+            <MapClickHandler />
+
+            {/* User */}
             <Marker position={userPosition} />
+
+            {/* Pickup */}
+            {pickup && <Marker position={pickup} />}
+
+            {/* Destination */}
+            {destinationCoords && <Marker position={destinationCoords} />}
           </MapContainer>
         </section>
 
@@ -229,7 +267,7 @@ export default function Reservation({ onReserve, onOpenProfile, onOpenHistorique
             </>
           ) : (
             <div className="no-search-message">
-              Remplissez les deux champs puis cliquez sur "Rechercher un trajet"
+              Remplissez les champs ou utilisez la carte pour définir le trajet
             </div>
           )}
         </section>
